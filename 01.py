@@ -14,7 +14,7 @@ def check_calibration_value(value, part2=False):
     return int(indices[min(indices)] + indices[max(indices)])
 
 
-with open("input/01.txt") as f:
+with open("inputs/01.txt") as f:
     codes = [i.strip() for i in f.readlines()]
 
 print(f"Part 1: {sum([check_calibration_value(code) for code in codes])}")
