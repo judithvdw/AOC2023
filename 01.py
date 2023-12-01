@@ -11,7 +11,6 @@ def check_calibration_value(value, part2=False):
             if digit in value:
                 indices[value.index(digit)] = valid_digits[digit]
                 indices[value.rindex(digit)] = valid_digits[digit]
-    print(indices)
     return int(indices[min(indices)] + indices[max(indices)])
 
 
