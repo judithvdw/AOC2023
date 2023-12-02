@@ -14,11 +14,10 @@ def parse(raw_data):
 
 def part1(all_games):
     total = 0
-    RED, GREEN, BLUE = 12, 13, 14
+    valids = {"red": 12, "green": 13, "blue": 14}
     for nr, cubes in all_games.items():
         for cube in cubes:
-            if (cube[1] == "blue" and cube[0] > BLUE) or (cube[1] == "green" and cube[0] > GREEN) or (
-                    cube[1] == "red" and cube[0] > RED):
+            if cube[0] > valids[cube[1]]:
                 break
         else:
             total += nr
@@ -28,9 +27,7 @@ def part1(all_games):
 def part2(all_games):
     powers = []
     for nr, cubes in all_games.items():
-        reds = []
-        blues = []
-        greens = []
+        reds, greens, blues = [], [], []
         for cube in cubes:
             if cube[1] == "blue":
                 blues.append(cube[0])
