@@ -1,22 +1,25 @@
 def parse_data(raw):
-    my_nrs = []
     winning_nrs = []
     for line in raw:
         nr, data = line.split(":")
         my, winning = data.split("|")
         my = set(map(int, my.split()))
         winning = set(map(int, winning.split()))
-        my_nrs.append(my)
-        winning_nrs.append(winning)
-    return my_nrs, winning_nrs
+        my_winning = my & winning
+        winning_nrs.append(len(my_winning))
+    return winning_nrs
 
 
 with open("inputs/04.txt") as f:
     raw = f.readlines()
-    my_nrs, winning_nrs = parse_data(raw)
-    totals = 0
-    for my, winning in zip(my_nrs, winning_nrs):
-        my_winning = my & winning
-        points = 2 ** (len(my_winning) - 1) if len(my_winning) > 0 else 0
-        totals += points
-    print(totals)
+    number_of_winning_numbers = parse_data(raw)
+    points = map(lambda x: 2 ** (x - 1) if x > 0 else 0, number_of_winning_numbers)
+    print(f"Part 1: {sum(points)}")
+
+    cards = [1] * len(number_of_winning_numbers)
+    for i, n in enumerate(number_of_winning_numbers):
+        amount = cards[i]
+        for j in range(i+1, i + n + 1):
+            cards[j] += amount
+    print(f"Part 2: {sum(cards)}")
+
