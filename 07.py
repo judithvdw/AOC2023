@@ -3,16 +3,15 @@ from collections import Counter
 
 def get_type(hand):
     hand = Counter(hand)
-    most_common = hand[max(hand)]
-    if most_common == 5:
+    if hand.most_common()[0][1] == 5:
         return 1 # five of a kind
-    elif most_common == 4:
+    elif hand.most_common()[0][1] == 4:
         return 2 # four of a kind
-    elif most_common == 3 and hand.most_common()[1][1] == 2:
+    elif hand.most_common()[0][1] == 3 and hand.most_common()[1][1] == 2:
         return 3 # full house
-    elif most_common == 3:
+    elif hand.most_common()[0][1] == 3:
         return 4 # three of a kind
-    elif most_common == 2 and hand.most_common()[1][1] == 2:
+    elif hand.most_common()[0][1] == 2 and hand.most_common()[1][1] == 2:
         return 5 # two pair
     elif hand.most_common()[0][1] == 2:
         return 6 # pair
@@ -23,21 +22,20 @@ def get_type(hand):
 def get_type_with_jokers(hand):
     hand = Counter(hand)
     num_jokers = hand["J"]
-    most_common = hand[max(hand)]
-    if most_common == 5:
+    if hand.most_common()[0][1] == 5:
         return 1  # 5 of a kind
-    elif most_common == 4:
+    elif hand.most_common()[0][1] == 4:
         return 1
-    elif most_common == 3 and hand.most_common()[1][1] == 2:
+    elif hand.most_common()[0][1] == 3 and hand.most_common()[1][1] == 2:
         return 1
-    elif most_common == 3:
+    elif hand.most_common()[0][1] == 3:
         return 2  # 4 of a kind
-    elif most_common == 2 and hand.most_common()[1][1] == 2:
+    elif hand.most_common()[0][1] == 2 and hand.most_common()[1][1] == 2:
         if num_jokers == 2:
             return 2
         else:  # num_jokers == 1
             return 3  # full house
-    elif most_common == 2:
+    elif hand.most_common()[0][1] == 2:
         return 4  # three of a kind
     else:
         return 6  # two of a kind
