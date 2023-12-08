@@ -13,11 +13,11 @@ def parse_data(raw):
     return instructions, network_dict
 
 
-def walk_graph(start, ends, network, instructions):
+def walk_graph(start, network, instructions):
     steps = 0
     current = start
     for step in cycle(instructions):
-        if current in ends:
+        if current[-1] == "Z":
             return steps
         steps += 1
         left, right = network[current]
@@ -31,14 +31,7 @@ with open("inputs/08.txt") as f:
     raw = f.readlines()
 
 instructions, network = parse_data(raw)
-
-print(f"Part 1{walk_graph("AAA", ["ZZZ"], network, instructions)}")
-
 starts = list(filter(lambda x: x[2] == "A", network.keys()))
-ends = list(filter(lambda x: x[2] == "Z", network.keys()))
 
-lengths = []
-for start in starts:
-    lengths.append(walk_graph(start, ends, network, instructions))
-
-print(f"Part 1: {math.lcm(*lengths)}")
+print(f"Part 1: {walk_graph("AAA", network, instructions)}")
+print(f"Part 2: {math.lcm(*[walk_graph(start, network, instructions) for start in starts])}")

@@ -34,7 +34,7 @@ def check_range(seed, seed_ranges):
     return False
 
 
-with open("inputs/05t.txt") as f:
+with open("inputs/05.txt") as f:
     raw = f.read()
     seeds, seed_ranges, info_maps = parse_data(raw)
 
@@ -50,7 +50,6 @@ print(f"Part 1: {min(destinations)}")
 location = 0
 while True:
     seed = from_location_to_seed(location, info_maps[::-1])
-    print(location, seed, location - seed)
     if check_range(seed, seed_ranges):
         print(f"Part 2: {location}")
         break
