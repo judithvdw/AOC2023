@@ -1,4 +1,4 @@
-def get_next_sequence(sequence):
+def get_next_number(sequence):
     nums = []
     last_num = sequence[-1]
     while any(sequence):
@@ -13,5 +13,5 @@ def get_next_sequence(sequence):
 with open("inputs/09.txt") as f:
     sequences = [list(map(int, (k.split()))) for k in f.readlines()]
 
-    print(sum(list(map(get_next_sequence, sequences))))
-    print(sum(list(map(get_next_sequence, [i[::-1] for i in sequences]))))
+    print(sum(list(map(get_next_number, sequences))))
+    print(sum(list(map(get_next_number, [i[::-1] for i in sequences]))))
