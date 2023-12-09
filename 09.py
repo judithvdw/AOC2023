@@ -13,5 +13,5 @@ def get_next_number(sequence):
 with open("inputs/09.txt") as f:
     sequences = [list(map(int, (k.split()))) for k in f.readlines()]
 
-    print(sum(list(map(get_next_number, sequences))))
-    print(sum(list(map(get_next_number, [i[::-1] for i in sequences]))))
+print(f"Part 1: {sum(list(map(get_next_number, sequences)))}")
+print(f"Part 2: {sum(list(map(get_next_number, [i[::-1] for i in sequences])))}")
