@@ -1,6 +1,3 @@
-from scipy.spatial.distance import cityblock
-
-
 def get_coords(raw_map):
     coords = []
     for y in range(len(raw_map)):
@@ -22,7 +19,7 @@ def adjust_coords(coords, factor):
 
 def get_distances(coord, coords):
     for compare in coords:
-        yield cityblock(coord, compare)
+        yield abs(coord[0] - compare[0]) + abs(coord[1] - compare[1])
 
 
 def get_totals(coords):
