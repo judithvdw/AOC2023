@@ -1,21 +1,10 @@
-from collections import defaultdict, deque
-
-neighboormapping = {
-    "-": ((0, -1), (0, 1)),
-    "|": ((-1, 0), (1, 0)),
-    "F": ((1, 0), (0, 1)),
-    "7": ((1, 0), (0, -1)),
-    "J": ((-1, 0), (0, -1)),
-    "L": ((-1, 0), (0, 1)),
-    # "S": ((1, 0), (0, -1)),  # Determined by hand actual input
-    "S": ((1, 0), (0, 1))  # Testinput
-}
+from collections import defaultdict, deque, Counter
 
 
 def get_pipe_locations(grid):
     symbols = {}
-    for x in range(len(grid)):
-        for y in range(len(grid[0])):
+    for y in range(len(grid[0])):
+        for x in range(len(grid)):
             if grid[x][y] in neighboormapping:
                 symbols[(x, y)] = grid[x][y]
                 if grid[x][y] == "S":
@@ -23,7 +12,7 @@ def get_pipe_locations(grid):
     return symbols, s
 
 
-def get_adjacency_graph(pipemap):
+def get_adjacency_graph(pipemap, neighboormapping):
     graph = defaultdict(list)
     for location, symbol in pipemap.items():
         neigbours = neighboormapping[symbol]
@@ -59,11 +48,52 @@ def dfs(graph, source):
     return visited
 
 
-with open("inputs/10t2.txt") as f:
+def clean_raw(raw, loop):
+    clean_raw = []
+    for y, line in enumerate(raw):
+        clean_raw_line = ""
+        for x, cell in enumerate(line):
+            if (y, x) in loop:
+                if cell == "S":
+                    clean_raw_line += "7"
+                else:
+                    clean_raw_line += cell
+            else:
+                clean_raw_line += "."
+        clean_raw.append(clean_raw_line)
+    return clean_raw
+
+
+def find_inside_cells(loop, raw):
+    not_loop = {(x, y) for x in range(len(raw)) for y in range(len(raw[0]))} - loop
+    inside_cells = []
+    cleanraw = clean_raw(raw, loop)
+    for cell in sorted(not_loop):
+        x, y = cell
+        left_view = cleanraw[x][y:]
+        overview = Counter(left_view)
+        walls = overview["|"] + min(overview["L"], overview["7"]) + min(overview["F"], overview["J"])
+        if walls % 2 == 1:
+            inside_cells.append(cell)
+    return inside_cells
+
+
+with open("inputs/10.txt") as f:
     raw = f.read().splitlines()
 
-pipemap, start = get_pipe_locations(raw)
-graph = get_adjacency_graph(pipemap)
+neighboormapping = {
+    "-": ((0, -1), (0, 1)),
+    "|": ((-1, 0), (1, 0)),
+    "F": ((1, 0), (0, 1)),
+    "7": ((1, 0), (0, -1)),
+    "J": ((-1, 0), (0, -1)),
+    "L": ((-1, 0), (0, 1)),
+    "S": ((1, 0), (0, -1)),  # Determined by hand actual input
+    # "S": ((1, 0), (0, 1))  # Testinput
+}
 
+pipemap, start = get_pipe_locations(raw)
+graph = get_adjacency_graph(pipemap, neighboormapping)
 loop = dfs(graph, start)
-print(len(loop) // 2)
+print(f"Part 1: {len(loop) // 2}")
+print(f"Part 2: {len(find_inside_cells(loop, raw))}")
